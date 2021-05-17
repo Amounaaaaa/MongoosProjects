@@ -1,3 +1,4 @@
+const { json } = require('express')
 const express=require('express')
 const router=express.Router()
 const Person=require('../models/Person')
@@ -12,17 +13,33 @@ router.post('/person',(req,res)=>{
         favoriteFoods, 
     })
     person.save()
-    .then(person=>res.status(200).json('peron add with succes'))
+    .then(person=>res.status(200).json('person add with succes'))
     .catch(err=>res.status(400).json(err))
 
 
 })
-/*Create Many Records with model.create()*/
-router.post('/addMany',(req,res)=>{
-    const {data}= req.body
-    const createManyPeople=(data,(err,data)=>{
-    if(err) throw err
-    console.log(data)
-    })})
+/** Find person by name  */
+
+router.get('/findName/:name',(req,res)=>{
+    var regex = new RegExp(req.params.name, "i")
+    , query = { name: regex };
+
+    Person.find(query, function(err) {
+        if (err) {
+            res.json(err);
+        }
+
+            res.json("exist!");
+    });
+
+}); 
+//request Delete
+router.delete('/person/:id',(req,res)=>{
+    Person.findByIdAndDelete(req.params.id)
+    .then(user=>res.status(200).json(user))
+    .catch(err=>res.status(400).json(err))
+})
+
+
     
 module.exports=router
