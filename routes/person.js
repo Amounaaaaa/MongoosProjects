@@ -18,21 +18,7 @@ router.post('/person',(req,res)=>{
 
 
 })
-/** Find person by name  */
 
-router.get('/findName/:name',(req,res)=>{
-    var regex = new RegExp(req.params.name, "i")
-    , query = { name: regex };
-
-    Person.find(query, function(err) {
-        if (err) {
-            res.json(err);
-        }
-
-            res.json("exist!");
-    });
-
-}); 
 //request Delete
 router.delete('/person/:id',(req,res)=>{
     Person.findByIdAndDelete(req.params.id)
