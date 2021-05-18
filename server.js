@@ -2,7 +2,7 @@ const { response } = require("express")
 const express=require("express")
 const app=express()
 const mongoose=require('mongoose')
-const Person = require("./models/Person")
+const PersonModel = require("./models/Person")
 require('dotenv').config({path:'config/.env'})
 
 
@@ -16,6 +16,14 @@ mongoose.connect(process.env.MONGO_URI,{ useNewUrlParser: true},{connectTimeoutM
     else
     console.log('connect to db...')
 })
+/* Save person */
+const person = new PersonModel({ name: 'Amounnnn' });
+person.save(function (err) {
+  if (err) return handleError(err);
+  else console.log("user saved !")
+  // saved!
+});
+
 /** Create many People with `Model.create()` */
 var arrayOfPeople = [
     {name: "anas", age: 74,   favoriteFoods: ["pizza"]},
@@ -24,12 +32,17 @@ var arrayOfPeople = [
   ];
  
 
-  Person.create (arrayOfPeople,(err)=>{
+  PersonModel.create (arrayOfPeople,(err)=>{
     if (err) console.log("opps erreur")
     else
     console.log("data added")
   }
   )
+  //Find persons by given name !
+PersonModel.find({ name: 'anas' }).exec((err,person)=>{
+    err ? console.log(err)  : console.log("liste user",person)
+  });
+
   
 app.use('/api',require('./routes/person'))
 app.listen(4006,()=>{
